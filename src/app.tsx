@@ -1,6 +1,7 @@
 import Footer from '@/components/Footer';
 import { Question } from '@/components/RightContent';
 import { LinkOutlined } from '@ant-design/icons';
+import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { SettingDrawer } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig } from '@umijs/max';
 import { history, Link } from '@umijs/max';
@@ -8,12 +9,14 @@ import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDrop
 import { errorConfig } from './requestErrorConfig';
 import {getCurrentUserUsingGET} from "@/services/rico/userController";
 const isDev = process.env.NODE_ENV === 'development';
+import defaultSettings from '../config/defaultSettings';
 const loginPath = '/user/login';
 
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
 export async function getInitialState(): Promise<{
+  settings?: Partial<LayoutSettings>;
   currentUser?: API.User;
 }> {
   const fetchUserInfo = async () => {
@@ -23,7 +26,6 @@ export async function getInitialState(): Promise<{
     } catch (error) {
       history.push(loginPath);
     }
-    return undefined;
   };
   // 如果不是登录页面，执行
   const { location } = history;
@@ -31,9 +33,11 @@ export async function getInitialState(): Promise<{
     const currentUser = await fetchUserInfo();
     return {
       currentUser,
+      settings: defaultSettings as Partial<LayoutSettings>
     };
   }
   return {
+    settings: defaultSettings as Partial<LayoutSettings>
   };
 }
 
