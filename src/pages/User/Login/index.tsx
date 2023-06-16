@@ -57,6 +57,7 @@ const Login: React.FC = () => {
       message.error(defaultLoginFailureMessage);
     }
   };
+
   return (
     <div className={containerClassName}>
       <Helmet>

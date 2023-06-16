@@ -11,7 +11,7 @@ import {getCurrentUserUsingGET} from "@/services/rico/userController";
 const isDev = process.env.NODE_ENV === 'development';
 import defaultSettings from '../config/defaultSettings';
 const loginPath = '/user/login';
-
+<script type="text/javascript" src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=TqOzzE83obtEmCyktpYEBKrqKF9fD04Q"></script>
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
@@ -46,6 +46,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
   return {
     actionsRender: () => [<Question key="doc" />],
     avatarProps: {
+      src: initialState?.currentUser?.userAvatar,
       title: <AvatarName />,
       render: (_, avatarChildren) => {
         return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
@@ -102,7 +103,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
           <SettingDrawer
             disableUrlParams
             enableDarkTheme
-
+            settings={initialState?.settings}
             onSettingChange={(settings) => {
               setInitialState((preInitialState) => ({
                 ...preInitialState,
@@ -113,7 +114,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
         </>
       );
     },
-
+    ...initialState?.settings,
   };
 };
 

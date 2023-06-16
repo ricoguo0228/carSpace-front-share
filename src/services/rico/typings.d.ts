@@ -13,6 +13,13 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseListIreserve = {
+    code?: number;
+    data?: Ireserve[];
+    description?: string;
+    message?: string;
+  };
+
   type BaseResponselong = {
     code?: number;
     data?: number;
@@ -31,7 +38,7 @@ declare namespace API {
     imageUrl?: string;
     location?: string;
     price?: number;
-    timeSlots?: Record<string, any>;
+    timeSlots?: timeNameLocalDateTime[];
   };
 
   type CarSpaceUpdateRequest = {
@@ -44,6 +51,21 @@ declare namespace API {
 
   type IdRequest = {
     id?: number;
+  };
+
+  type Ireserve = {
+    carId?: number;
+    endTime?: string;
+    iid?: number;
+    insertTime?: string;
+    isDelete?: number;
+    startTime?: string;
+    updateTime?: string;
+  };
+
+  type IreserveIncreaseRequest = {
+    carId?: number;
+    timeSlots?: timeNameLocalDateTime[];
   };
 
   type ModelAndView = {
@@ -130,6 +152,7 @@ declare namespace API {
     nickName?: string;
     updateTime?: string;
     userAccount?: string;
+    userAvatar?: string;
     userCredit?: number;
     userId?: number;
     userPassword?: string;

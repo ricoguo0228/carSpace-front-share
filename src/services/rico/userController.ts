@@ -23,7 +23,10 @@ export async function deleteUsersUsingPOST(body: API.IdRequest, options?: { [key
 }
 
 /** userLogin POST /api/user/login */
-export async function userLoginUsingPOST(body: API.UserLoginRequest, options?: { [key: string]: any },) {
+export async function userLoginUsingPOST(
+  body: API.UserLoginRequest,
+  options?: { [key: string]: any },
+) {
   return request<API.BaseResponseUser>('/api/user/login', {
     method: 'POST',
     headers: {
