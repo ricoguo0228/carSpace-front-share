@@ -32,14 +32,15 @@ const onFinish = async (values: any) => {
     message.error(res.message);
   }
 };
+
 const CarSpaceCreate: React.FC = () => {
   return (
     <div className="create-car-space">
       <Row gutter={24}>
-        <Col span={12}>
+        <Col span={16}>
           <Card></Card>
         </Col>
-        <Col span={12}>
+        <Col span={8}>
           <Card>
             <Form
               onFinish={(values) => {

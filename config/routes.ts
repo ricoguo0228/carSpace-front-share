@@ -3,19 +3,22 @@ export default [
     path: '/user',
     layout: false,
     routes: [
-      { path: '/user/login', component: './User/Login' },
-      { path: '/user/register', component: './User/Register' },
+      {path: '/user/login', component: './User/Login'},
+      {path: '/user/register', component: './User/Register'},
     ],
   },
-
   {
-    path: '/carSpace/create',
-    name: '创建车位',
-    icon: 'PlusSquareOutlined',
-    component: './CarSpaceCreate',
+    path: '/carSpace',
+    name:'车位',
+    icon:'CarOutlined',
+    routes: [
+      {path: '/carSpace/create', name: '创建车位', icon: 'PlusSquareOutlined', component: './CarSpace/CarSpaceCreate',},
+      {path: '/carSpace/room', name: '车位大厅', icon: 'SendOutlined', component: './CarSpace/CarSpaceRoom'},
+      {path: '/carSpace/reserve',  component: './CarSpace/CarSpaceReserve'},
+    ]
   },
-  { path: '/carSpace/room', name: '车位大厅', icon: 'SendOutlined', component: './CarSpaceRoom' },
 
-  { path: '/', redirect: '/carSpace/create' },
-  { path: '*', name: '404', layout: false, component: './404' },
+
+  {path: '/', redirect: '/carSpace/room'},
+  {path: '*', name: '404', layout: false, component: './404'},
 ];

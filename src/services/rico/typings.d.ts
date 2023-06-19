@@ -27,6 +27,13 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseListReservation = {
+    code?: number;
+    data?: Reservation[];
+    description?: string;
+    message?: string;
+  };
+
   type BaseResponselong = {
     code?: number;
     data?: number;
@@ -172,6 +179,23 @@ declare namespace API {
       | 'VARIANT_ALSO_NEGOTIATES';
     view?: View;
     viewName?: string;
+  };
+
+  type Reservation = {
+    carId?: number;
+    insertTime?: string;
+    reserveEndTime?: string;
+    reserveId?: number;
+    reserveStartTime?: string;
+    reserveStatus?: number;
+    reserverId?: number;
+    updateTime?: string;
+  };
+
+  type ReservationAddRequest = {
+    carId?: number;
+    reserveEndTime?: string;
+    reserveStartTime?: string;
   };
 
   type User = {

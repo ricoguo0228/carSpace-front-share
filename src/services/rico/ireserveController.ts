@@ -2,8 +2,8 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
-/** timeSlotsIncrease POST /api/Ireserve/delete */
-export async function timeSlotsIncreaseUsingPOST(
+/** timeSlotsDelete POST /api/Ireserve/delete */
+export async function timeSlotsDeleteUsingPOST(
   body: API.IdRequest,
   options?: { [key: string]: any },
 ) {
@@ -18,7 +18,7 @@ export async function timeSlotsIncreaseUsingPOST(
 }
 
 /** timeSlotsIncrease POST /api/Ireserve/increase */
-export async function timeSlotsIncreaseUsingPOST1(
+export async function timeSlotsIncreaseUsingPOST(
   body: API.IreserveIncreaseRequest,
   options?: { [key: string]: any },
 ) {

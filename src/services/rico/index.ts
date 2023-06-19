@@ -5,10 +5,12 @@
 import * as basicErrorController from './basicErrorController';
 import * as carSpaceController from './carSpaceController';
 import * as ireserveController from './ireserveController';
+import * as reservationController from './reservationController';
 import * as userController from './userController';
 export default {
   basicErrorController,
   carSpaceController,
   ireserveController,
+  reservationController,
   userController,
 };
