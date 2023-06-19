@@ -22,6 +22,7 @@ const { RangePicker } = DatePicker;
  */
 const onFinish = async (values: any) => {
   const res = await carSpaceCreateUsingPOST(values);
+  console.log(values);
   if (res.code === 0) {
     const defaultLoginSuccessMessage = '创建成功！';
     message.success(defaultLoginSuccessMessage);

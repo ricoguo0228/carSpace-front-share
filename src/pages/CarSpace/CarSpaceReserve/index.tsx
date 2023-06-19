@@ -3,7 +3,11 @@ import React, {useEffect, useState} from 'react';
 import {Button, Card, Col, DatePicker, Descriptions, List, message, Modal, Row, Space} from "antd";
 import {PayCircleOutlined, PhoneOutlined, UserOutlined} from "@ant-design/icons";
 import dayjs from "dayjs";
-import {addReservationUsingPOST, currentReservationsUsingPOST} from "@/services/rico/reservationController";
+import {
+  addReservationUsingPOST,
+  currentReservationsUsingPOST,
+  deleteReservationUsingPOST
+} from "@/services/rico/reservationController";
 import {getCurrentCarSpaceUsingPOST} from "@/services/rico/carSpaceController";
 
 
@@ -51,6 +55,15 @@ const CarSpaceReserve: React.FC = () => {
   }
   const showAddMessage = () => {
     setshowMessage(true);
+  }
+  const cancel = async (value:any)=>{
+    const res =await deleteReservationUsingPOST({id:value});
+    if(res.code){
+      message.success('取消预约成功');
+      await loadData();
+    }else{
+      message.error('取消预约失败');
+    }
   }
   const handleCancel = () => {
     setshowMessage(false);
@@ -151,8 +164,8 @@ const CarSpaceReserve: React.FC = () => {
                             disabled
                             defaultValue={[dayjs(item.reserveStartTime), dayjs(item.reserveEndTime)]}
                           />
-                          <Button size={"small"} onClick={showAddMessage}>
-                            重设
+                          <Button size={"small"} onClick={()=>cancel(item.reserveId)}>
+                            取消预约
                           </Button>
                         </Space>
                       </div>}
