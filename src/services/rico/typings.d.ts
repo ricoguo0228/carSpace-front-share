@@ -1,14 +1,21 @@
 declare namespace API {
-  type BaseResponse = {
+  type BaseResponseboolean = {
     code?: number;
-    data?: Record<string, any>;
+    data?: boolean;
     description?: string;
     message?: string;
   };
 
-  type BaseResponseboolean = {
+  type BaseResponseComplCarspace = {
     code?: number;
-    data?: boolean;
+    data?: ComplCarspace;
+    description?: string;
+    message?: string;
+  };
+
+  type BaseResponseListComplCarspace = {
+    code?: number;
+    data?: ComplCarspace[];
     description?: string;
     message?: string;
   };
@@ -34,6 +41,20 @@ declare namespace API {
     message?: string;
   };
 
+  type Carspace = {
+    carId?: number;
+    carStatus?: number;
+    countTime?: number;
+    imageUrl?: string;
+    insertTime?: string;
+    isDelete?: number;
+    location?: string;
+    ownerId?: number;
+    price?: number;
+    reserveTime?: number;
+    updateTime?: string;
+  };
+
   type CarSpaceCreateRequest = {
     imageUrl?: string;
     location?: string;
@@ -47,6 +68,13 @@ declare namespace API {
     location?: string;
     price?: number;
     timeSlots?: Record<string, any>;
+  };
+
+  type ComplCarspace = {
+    carspace?: Carspace;
+    ireseres?: Ireserve[];
+    ownerName?: string;
+    phoneNumber?: string;
   };
 
   type IdRequest = {

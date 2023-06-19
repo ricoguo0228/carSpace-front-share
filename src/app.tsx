@@ -1,17 +1,17 @@
 import Footer from '@/components/Footer';
 import { Question } from '@/components/RightContent';
+import { getCurrentUserUsingGET } from '@/services/rico/userController';
 import { LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { SettingDrawer } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig } from '@umijs/max';
 import { history, Link } from '@umijs/max';
+import defaultSettings from '../config/defaultSettings';
 import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDropdown';
 import { errorConfig } from './requestErrorConfig';
-import {getCurrentUserUsingGET} from "@/services/rico/userController";
 const isDev = process.env.NODE_ENV === 'development';
-import defaultSettings from '../config/defaultSettings';
 const loginPath = '/user/login';
-<script type="text/javascript" src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=TqOzzE83obtEmCyktpYEBKrqKF9fD04Q"></script>
+
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
@@ -33,11 +33,11 @@ export async function getInitialState(): Promise<{
     const currentUser = await fetchUserInfo();
     return {
       currentUser,
-      settings: defaultSettings as Partial<LayoutSettings>
+      settings: defaultSettings as Partial<LayoutSettings>,
     };
   }
   return {
-    settings: defaultSettings as Partial<LayoutSettings>
+    settings: defaultSettings as Partial<LayoutSettings>,
   };
 }
 
@@ -125,6 +125,6 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
  */
 export const request = {
   ...errorConfig,
-  baseURL:'http://localhost:8080',
+  baseURL: 'http://localhost:8080',
   withCredentials: true,
 };
