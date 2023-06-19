@@ -43,7 +43,7 @@ const CarSpaceReserve: React.FC = () => {
     })
     if (res.code === 0) {
       message.success('您已成功预约');
-      loadData();
+      await loadData();
     } else {
       message.error('预约失败');
     }
