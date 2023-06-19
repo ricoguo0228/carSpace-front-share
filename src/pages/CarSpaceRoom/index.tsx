@@ -3,9 +3,10 @@ import { Button, Card, DatePicker, Descriptions, List, message, Modal } from 'an
 // import Search from 'antd/es/input/Search';
 
 import {
-  getCurrentCarSpaceUsingGET,
+  getCurrentCarSpaceUsingPOST,
   listCarSpacesUsingPOST,
 } from '@/services/rico/carSpaceController';
+import { PayCircleOutlined, PhoneOutlined, PushpinOutlined, UserOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 
@@ -18,6 +19,7 @@ const CarpSpaceRoomPage: React.FC = () => {
   //   current: 1,
   //   pageSize: 12,
   // };
+
   const [carSpaceList, setCarSpaceList] = useState<API.ComplCarspace[]>();
   const [currentCarSpace, setCurrentCarSpace] = useState<API.ComplCarspace>();
   // const [total, setTotal] = useState<number>(0);
@@ -31,6 +33,7 @@ const CarpSpaceRoomPage: React.FC = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
   const loadData = async () => {
     setLoading(true);
     try {
@@ -45,26 +48,61 @@ const CarpSpaceRoomPage: React.FC = () => {
     }
     setLoading(false);
   };
-  const showMessage = async (value: any) => {
-    console.log(value);
-    const res = await getCurrentCarSpaceUsingGET(value);
-    if (res.data) {
+
+  const showMessage = async (value: number) => {
+    const res = await getCurrentCarSpaceUsingPOST({ id: value });
+    if (res.code === 0) {
       setCurrentCarSpace(res.data);
       setIsModalOpen(true);
+    } else {
+      message.error(res.message);
     }
   };
+
   useEffect(() => {
     loadData();
   }, []);
+
   return (
     <div className="room">
-      <Modal title="车位详情" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <Descriptions title={currentCarSpace?.carspace?.location}>
-          <Descriptions.Item label="车位时价：">
-            {currentCarSpace?.carspace?.price}
+      <Modal
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        cancelText={'关闭'}
+        okText={'预约'}
+      >
+        <Descriptions title={currentCarSpace?.carspace?.location} column={1}>
+          <Descriptions.Item
+            label={
+              <div>
+                <PayCircleOutlined />
+                {'车位时价'}
+              </div>
+            }
+          >
+            {currentCarSpace?.carspace?.price + '元/时'}
           </Descriptions.Item>
-          <Descriptions.Item label="车位主人">{currentCarSpace?.ownerName}</Descriptions.Item>
-          <Descriptions.Item label="联系电话">{currentCarSpace?.phoneNumber}</Descriptions.Item>
+          <Descriptions.Item
+            label={
+              <div>
+                <UserOutlined />
+                {'车位主人'}
+              </div>
+            }
+          >
+            {currentCarSpace?.ownerName}
+          </Descriptions.Item>
+          <Descriptions.Item
+            label={
+              <div>
+                <PhoneOutlined />
+                {'联系电话'}
+              </div>
+            }
+          >
+            {currentCarSpace?.phoneNumber}
+          </Descriptions.Item>
           <Descriptions.Item label="可预约时间">
             <List
               loading={loading}
@@ -72,6 +110,7 @@ const CarpSpaceRoomPage: React.FC = () => {
               renderItem={(item) => (
                 <List.Item>
                   <DatePicker.RangePicker
+                    size={'small'}
                     showTime
                     disabled
                     defaultValue={[dayjs(item.startTime), dayjs(item.endTime)]}
@@ -99,18 +138,21 @@ const CarpSpaceRoomPage: React.FC = () => {
           <List.Item>
             <Card
               title={
-                item.carspace
-                  ? item.carspace.location
+                <div>
+                  {item.carspace
                     ? item.carspace.location
-                    : '位置未知'
-                  : '位置未知'
+                      ? item.carspace.location + '  '
+                      : '位置未知'
+                    : '位置未知'}
+                  <PushpinOutlined />
+                </div>
               }
               extra={
                 <Button
                   size={'small'}
                   type="link"
                   onClick={() => {
-                    showMessage(item.carspace?.carId as API.IdRequest);
+                    showMessage(item.carspace?.carId ?? 0);
                   }}
                 >
                   {'详情'}
@@ -119,15 +161,19 @@ const CarpSpaceRoomPage: React.FC = () => {
             >
               <List.Item.Meta
                 description={
-                  item.carspace
-                    ? item.carspace.price
-                      ? '小时单价：' + item.carspace.price
-                      : '价格未知'
-                    : '价格未知'
+                  <div>
+                    <PayCircleOutlined />
+                    {item.carspace
+                      ? item.carspace.price
+                        ? '  ' + item.carspace.price + '元/时'
+                        : '价格未知'
+                      : '价格未知'}
+                  </div>
                 }
               />
-              <div style={{ marginBottom: 4 }} />
+              <div style={{ marginBottom: 8 }} />
               {'可预约时间段：'}
+
               <List
                 loading={loading}
                 dataSource={item.ireseres}

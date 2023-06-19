@@ -1,6 +1,6 @@
 import Footer from '@/components/Footer';
 
-import { getCurrentUserUsingGET, userLoginUsingPOST } from '@/services/rico/userController';
+import { getCurrentUserUsingPOST, userLoginUsingPOST } from '@/services/rico/userController';
 import { Link } from '@@/exports';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { LoginForm, ProFormText } from '@ant-design/pro-components';
@@ -26,7 +26,7 @@ const Login: React.FC = () => {
     };
   });
   const fetchUserInfo = async () => {
-    const userInfo = await getCurrentUserUsingGET();
+    const userInfo = await getCurrentUserUsingPOST();
     if (userInfo) {
       flushSync(() => {
         setInitialState((s) => ({

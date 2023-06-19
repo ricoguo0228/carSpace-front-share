@@ -2,10 +2,10 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
-/** getCurrentUser GET /api/user/current */
-export async function getCurrentUserUsingGET(options?: { [key: string]: any }) {
+/** getCurrentUser POST /api/user/current */
+export async function getCurrentUserUsingPOST(options?: { [key: string]: any }) {
   return request<API.BaseResponseUser>('/api/user/current', {
-    method: 'GET',
+    method: 'POST',
     ...(options || {}),
   });
 }

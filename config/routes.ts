@@ -8,8 +8,13 @@ export default [
     ],
   },
 
-  { path: '/carSpace/create', name: '创建车位', component: './CarSpaceCreate' },
-  { path: '/carSpace/room', name: '车位大厅', component: './CarSpaceRoom' },
+  {
+    path: '/carSpace/create',
+    name: '创建车位',
+    icon: 'PlusSquareOutlined',
+    component: './CarSpaceCreate',
+  },
+  { path: '/carSpace/room', name: '车位大厅', icon: 'SendOutlined', component: './CarSpaceRoom' },
 
   { path: '/', redirect: '/carSpace/create' },
   { path: '*', name: '404', layout: false, component: './404' },

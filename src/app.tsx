@@ -1,6 +1,6 @@
 import Footer from '@/components/Footer';
 import { Question } from '@/components/RightContent';
-import { getCurrentUserUsingGET } from '@/services/rico/userController';
+import { getCurrentUserUsingPOST } from '@/services/rico/userController';
 import { LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { SettingDrawer } from '@ant-design/pro-components';
@@ -21,7 +21,7 @@ export async function getInitialState(): Promise<{
 }> {
   const fetchUserInfo = async () => {
     try {
-      const msg = await getCurrentUserUsingGET();
+      const msg = await getCurrentUserUsingPOST();
       return msg.data;
     } catch (error) {
       history.push(loginPath);

@@ -17,13 +17,13 @@ export async function carSpaceCreateUsingPOST(
   });
 }
 
-/** getCurrentCarSpace GET /api/carSpaces/current */
-export async function getCurrentCarSpaceUsingGET(
+/** getCurrentCarSpace POST /api/carSpaces/current */
+export async function getCurrentCarSpaceUsingPOST(
   body: API.IdRequest,
   options?: { [key: string]: any },
 ) {
   return request<API.BaseResponseComplCarspace>('/api/carSpaces/current', {
-    method: 'GET',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
