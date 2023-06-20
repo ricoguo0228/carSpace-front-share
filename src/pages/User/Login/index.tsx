@@ -137,9 +137,9 @@ const Login: React.FC = () => {
               style={{
                 float: 'right',
               }}
-              to={'/user/login'}
+              to={'/user/register'}
             >
-              已经有账号了？登录
+              还没有账号？注册
             </Link>
           </div>
         </LoginForm>

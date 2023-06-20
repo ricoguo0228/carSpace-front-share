@@ -74,7 +74,6 @@ declare namespace API {
     imageUrl?: string;
     location?: string;
     price?: number;
-    timeSlots?: Record<string, any>;
   };
 
   type ComplCarspace = {

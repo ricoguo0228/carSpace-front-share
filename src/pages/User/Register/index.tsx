@@ -178,7 +178,7 @@ const Login: React.FC = () => {
               }}
               to={'/user/login'}
             >
-              返回登录界面
+              已经有账号了？登录
             </Link>
           </div>
         </LoginForm>
