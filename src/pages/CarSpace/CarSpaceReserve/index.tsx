@@ -68,7 +68,7 @@ const CarSpaceReserve: React.FC = () => {
       });
       await loadData();
     } else {
-      message.error('预约失败');
+      message.error('预约失败，'+res.description);
     }
     setshowMessage(false);
   }

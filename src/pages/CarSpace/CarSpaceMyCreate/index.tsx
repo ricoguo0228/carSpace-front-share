@@ -4,7 +4,7 @@ import {PayCircleOutlined, PushpinOutlined} from "@ant-design/icons";
 import dayjs from "dayjs";
 import {history} from "@@/core/history";
 import {sleep} from "@antfu/utils";
-import { listUserSpacesUsingPOST} from "@/services/rico/carSpaceController";
+import {listUserSpacesUsingPOST} from "@/services/rico/carSpaceController";
 import {useModel} from "@@/exports";
 
 const CarSpaceCreate: React.FC = () => {
@@ -15,14 +15,14 @@ const CarSpaceCreate: React.FC = () => {
     setLoading(true);
     await sleep(500);
     try {
-      const res = await listUserSpacesUsingPOST({id:initialState?.currentUser?.userId});
+      const res = await listUserSpacesUsingPOST({id: initialState?.currentUser?.userId});
       if (res.data) {
         setCarSpaceList(res.data ?? []);
       } else {
-        message.error('大厅加载失败');
+        message.error('大厅加载失败，' + res.description);
       }
     } catch (e: any) {
-      message.error('大厅加载失败' + e.message);
+      message.error('大厅加载失败，'+e.message);
     }
     setLoading(false);
   };
