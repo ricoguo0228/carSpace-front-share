@@ -3,13 +3,9 @@ import {history} from '@@/core/history';
 import {PlusOutlined} from '@ant-design/icons';
 import {Button, Card, Col, DatePicker, Form, Input, InputNumber, message, Row, Upload,} from 'antd';
 import React, {useState} from 'react';
-
 const {RangePicker} = DatePicker;
-
-
 const CarSpaceCreate: React.FC = () => {
   const [submitting, setSubmitting] = useState<boolean>(false);
-
   const onFinish = async (values: any) => {
     if (submitting) {
       message.error("正在创建中，请勿重复创建");
@@ -29,7 +25,6 @@ const CarSpaceCreate: React.FC = () => {
   };
   return (
     <div className="create-car-space">
-
       <Row gutter={24}>
         <Col span={16}>
           <Card></Card>

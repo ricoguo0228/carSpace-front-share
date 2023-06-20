@@ -226,6 +226,7 @@ declare namespace API {
   type UserUpdateRequest = {
     nickName?: string;
     userNewPassword?: string;
+    userPassword?: string;
     userPhone?: string;
   };
 

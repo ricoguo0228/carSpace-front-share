@@ -34,7 +34,6 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
     // Note: There may be security issues, please note
     if (window.location.pathname !== '/user/login' && !redirect) {
       history.replace({
-
         pathname: '/user/login',
         search: stringify({
           redirect: pathname + search,
@@ -69,7 +68,9 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
         loginOut();
         return;
       }
-      history.push(`/account/${key}`);
+      if (key === 'center') {
+        history.push('/user/center');
+      }
     },
     [setInitialState],
   );
@@ -115,10 +116,16 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
         ]
       : []),
     {
+      key: 'center',
+      icon:<UserOutlined />,
+      label: '个人中心',
+    },
+    {
       key: 'logout',
       icon: <LogoutOutlined />,
       label: '退出登录',
     },
+
   ];
 
   return (

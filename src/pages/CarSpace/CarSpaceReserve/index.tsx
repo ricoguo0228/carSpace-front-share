@@ -53,7 +53,6 @@ const CarSpaceReserve: React.FC = () => {
     }
     setLoading(false);
   }
-
   const handleOk = async () => {
     const res = await addReservationUsingPOST({
       carId: carId,
