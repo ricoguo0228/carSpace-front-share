@@ -10,7 +10,7 @@ import {
   getCurrentCarSpaceUsingPOST
 } from "@/services/rico/carSpaceController";
 import {sleep} from "@antfu/utils";
-import {timeSlotsIncreaseUsingPOST} from "@/services/rico/ireserveController";
+import {timeSlotsDeleteUsingPOST, timeSlotsIncreaseUsingPOST} from "@/services/rico/ireserveController";
 
 const CarSpaceMyCreateInfo: React.FC = () => {
   const state: any = useLocation().state;
@@ -42,12 +42,11 @@ const CarSpaceMyCreateInfo: React.FC = () => {
 
   const onfinish = async (values: any) => {
     const res = await carSpaceUpdateUsingPOST(values);
-    if(res.code === 0){
+    if (res.code === 0) {
       message.success("修改成功");
-      await loadData();
-    }
-    else{
-      message.error("修改失败，"+res.description);
+      history.push('/carSpace/myCreate')
+    } else {
+      message.error("修改失败，" + res.description);
     }
   }
 
@@ -57,10 +56,9 @@ const CarSpaceMyCreateInfo: React.FC = () => {
       timeSlots: timeSLots
     })
     if (res.code === 0) {
-      message.success("添加成功");
       await loadData();
     } else {
-      message.error('添加失败，' + res.description);
+      message.error('预约失败，' + res.description);
     }
     setShowMessage(false);
   }
@@ -87,6 +85,15 @@ const CarSpaceMyCreateInfo: React.FC = () => {
       message.error("删除失败," + res.description);
     }
   }
+  const deleteTimeSlot = async (value:any) => {
+    const res = await timeSlotsDeleteUsingPOST({id:value});
+    if(res.code === 0){
+      message.success("删除成功");
+      await loadData();
+    }else{
+      message.error("删除失败," + res.description);
+    }
+  }
   const showDeleteMessage = () => {
     setShowDelete(true);
   }
@@ -100,25 +107,25 @@ const CarSpaceMyCreateInfo: React.FC = () => {
   return (
     <div className="reserve-car-space">
       <Drawer
-        title="修改车位信息"
+        title="修改用户信息"
         placement="left"
         onClose={onClose} open={edit}
       >
-        <Form onFinish={(values:API.CarSpaceUpdateRequest) => {
+        <Form onFinish={(values: API.CarSpaceUpdateRequest) => {
           values.carId = currentCarSpace?.carspace?.carId;
-          if(!values.location) {
+          if (!values.location) {
             values.location = currentCarSpace?.carspace?.location;
           }
-          if(!values.price) {
+          if (!values.price) {
             values.price = currentCarSpace?.carspace?.price;
           }
           onfinish(values as API.CarSpaceUpdateRequest)
         }} labelAlign="left">
           <Form.Item name="location">
-            <Input prefix={<UserOutlined/>}  defaultValue={currentCarSpace?.carspace?.location}/>
+            <Input prefix={<UserOutlined/>} defaultValue={currentCarSpace?.carspace?.location}/>
           </Form.Item>
           <Form.Item name="price">
-            <Input prefix={<PayCircleOutlined />}  defaultValue={currentCarSpace?.carspace?.price}/>
+            <Input prefix={<PayCircleOutlined/>} defaultValue={currentCarSpace?.carspace?.price}/>
           </Form.Item>
           <Form.Item>
             <Button htmlType="submit">
@@ -196,15 +203,25 @@ const CarSpaceMyCreateInfo: React.FC = () => {
                   loading={loading}
                   dataSource={currentCarSpace?.ireseres}
                   renderItem={(item) => (
-                    <List.Item>
-                      <DatePicker.RangePicker
-                        size={'small'}
-                        showTime
-                        disabled
-                        defaultValue={[dayjs(item.startTime), dayjs(item.endTime)]}
-                      />
-                      <br/>
-                    </List.Item>
+                    <>
+
+                      <List.Item>
+                        <Space>
+                          <DatePicker.RangePicker
+                            size={'small'}
+                            showTime
+                            disabled
+                            defaultValue={[dayjs(item.startTime), dayjs(item.endTime)]}
+                          />
+                          <Button size="small" onClick={()=>{deleteTimeSlot(item.iid)}}>
+                            删除
+                          </Button>
+
+                        </Space>
+                        <br/>
+                      </List.Item>
+
+                    </>
                   )}
                 />
               </Descriptions.Item>

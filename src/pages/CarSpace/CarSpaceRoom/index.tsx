@@ -6,6 +6,7 @@ import {PayCircleOutlined, PhoneOutlined, PushpinOutlined, UserOutlined} from '@
 import dayjs from 'dayjs';
 import React, {useEffect, useState} from 'react';
 import {sleep} from "@antfu/utils";
+import {useModel} from "@@/exports";
 
 /**
  * 车位大厅
@@ -14,7 +15,7 @@ import {sleep} from "@antfu/utils";
 const CarpSpaceRoomPage: React.FC = () => {
   const [carSpaceList, setCarSpaceList] = useState<API.ComplCarspace[]>();
   const [currentCarSpace, setCurrentCarSpace] = useState<API.ComplCarspace>();
-
+  const {initialState} = useModel('@@initialState');
   const [loading, setLoading] = useState<boolean>();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -64,6 +65,8 @@ const CarpSpaceRoomPage: React.FC = () => {
         onCancel={handleCancel}
         cancelText={'关闭'}
         okText={'前往预约'}
+        //todo:加一个不是自己的车位不允许预约
+        //currentCarSpace?.carspace?.ownerId === initialState?.currentUser?.userId ? null :
       >
         <Descriptions title={currentCarSpace?.carspace?.location} column={1}>
           <Descriptions.Item
