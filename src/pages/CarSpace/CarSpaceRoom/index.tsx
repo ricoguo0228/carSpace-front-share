@@ -5,6 +5,7 @@ import {getCurrentCarSpaceUsingPOST, listCarSpacesUsingPOST,} from '@/services/r
 import {PayCircleOutlined, PhoneOutlined, PushpinOutlined, UserOutlined} from '@ant-design/icons';
 import dayjs from 'dayjs';
 import React, {useEffect, useState} from 'react';
+import {sleep} from "@antfu/utils";
 
 /**
  * 添加图表页面
@@ -28,6 +29,7 @@ const CarpSpaceRoomPage: React.FC = () => {
 
   const loadData = async () => {
     setLoading(true);
+    await sleep(500);
     try {
       const res = await listCarSpacesUsingPOST();
       if (res.data) {

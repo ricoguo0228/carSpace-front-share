@@ -1,6 +1,6 @@
 import {useLocation} from 'umi';
 import React, {useEffect, useState} from 'react';
-import {Button, Card, Col, DatePicker, Descriptions, List, message, Modal, Row, Space} from "antd";
+import {Button, Card, Col, DatePicker, Descriptions, List, message, Modal, notification, Row, Space} from "antd";
 import {PayCircleOutlined, PhoneOutlined, UserOutlined} from "@ant-design/icons";
 import dayjs from "dayjs";
 import {
@@ -9,7 +9,9 @@ import {
   deleteReservationUsingPOST
 } from "@/services/rico/reservationController";
 import {getCurrentCarSpaceUsingPOST} from "@/services/rico/carSpaceController";
-
+import Context from '@ant-design/icons/lib/components/Context';
+import { history } from 'umi';
+import {sleep} from "@antfu/utils";
 
 const CarSpaceReserve: React.FC = () => {
   const state: any = useLocation().state;
@@ -18,10 +20,23 @@ const CarSpaceReserve: React.FC = () => {
   const [Reservations, setReservations] = useState<API.Reservation[]>();
   const [loading, setLoading] = useState<boolean>();
   const [showMessage, setshowMessage] = useState<boolean>(false);
-  const [timeSLots, setTimeSLots] = useState<[]>()
-
+  const [timeSLots, setTimeSLots] = useState<[]>();
+  const [api, contextHolder] = notification.useNotification();
+  const btn = (
+    <Space>
+      <Button type="link" size="small" onClick={() => {
+        history.push('/center/reservations');
+      }}>
+        前往我的预约
+      </Button>
+      <Button type="primary" size="small" onClick={() => api.destroy()}>
+        关闭
+      </Button>
+    </Space>
+  );
   const loadData = async () => {
     setLoading(true);
+    await sleep(500);
     const ComplCarSpaceResponse = await getCurrentCarSpaceUsingPOST({id: carId});
     if(ComplCarSpaceResponse.data){
       setCurrentCarSpace(ComplCarSpaceResponse.data);
@@ -42,11 +57,15 @@ const CarSpaceReserve: React.FC = () => {
   const handleOk = async () => {
     const res = await addReservationUsingPOST({
       carId: carId,
-      reserveStartTime: timeSLots?.at(0),
-      reserveEndTime: timeSLots?.at(1)
+      timeSlots:timeSLots
     })
     if (res.code === 0) {
-      message.success('您已成功预约');
+      api["success"]({
+        message: `预约成功！ `,
+        description: <Context.Consumer>{() => '您已成功预约，请及时与车主联系并按时归还车位'}</Context.Consumer>,
+        btn,
+        placement:"topRight"
+      });
       await loadData();
     } else {
       message.error('预约失败');
@@ -58,7 +77,7 @@ const CarSpaceReserve: React.FC = () => {
   }
   const cancel = async (value:any)=>{
     const res =await deleteReservationUsingPOST({id:value});
-    if(res.code){
+    if(res.code === 0){
       message.success('取消预约成功');
       await loadData();
     }else{
@@ -78,6 +97,7 @@ const CarSpaceReserve: React.FC = () => {
 
   return (
     <div className="reserve-car-space">
+      {contextHolder}
       <Modal
         title={'预约时间'}
         open={showMessage}
