@@ -15,7 +15,7 @@ const CarSpaceCreate: React.FC = () => {
     setLoading(true);
     await sleep(500);
     try {
-      const res = await listReservedSpacesUsingPOST({id:initialState?.currentUser?.userId});
+      const res = await listReservedSpacesUsingPOST({id: initialState?.currentUser?.userId});
       if (res.data) {
         setCarSpaceList(res.data ?? []);
       } else {
@@ -33,6 +33,7 @@ const CarSpaceCreate: React.FC = () => {
     <div className="my-reserve">
 
       <List
+        split={false}
         grid={{
           gutter: 16,
           xs: 1,
@@ -84,6 +85,7 @@ const CarSpaceCreate: React.FC = () => {
               <div style={{marginBottom: 8}}/>
               {'已预约时间：'}
               <List
+                split={false}
                 loading={loading}
                 dataSource={item.ireseres}
                 renderItem={(item) => (

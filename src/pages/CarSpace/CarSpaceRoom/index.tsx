@@ -98,6 +98,7 @@ const CarpSpaceRoomPage: React.FC = () => {
           </Descriptions.Item>
           <Descriptions.Item label="可预约时间">
             <List
+              split={false}
               loading={loading}
               dataSource={currentCarSpace?.ireseres}
               renderItem={(item) => (
@@ -116,6 +117,7 @@ const CarpSpaceRoomPage: React.FC = () => {
         </Descriptions>
       </Modal>
       <List
+        split={false}
         grid={{
           gutter: 16,
           xs: 1,
@@ -166,8 +168,8 @@ const CarpSpaceRoomPage: React.FC = () => {
               />
               <div style={{marginBottom: 8}}/>
               {'可预约时间段：'}
-
               <List
+                split={false}
                 loading={loading}
                 dataSource={item.ireseres}
                 renderItem={(item) => (
