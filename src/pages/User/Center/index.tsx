@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Card, Col, Drawer, Form, Image, Input, message, Row} from "antd";
-import {getCurrentUserUsingPOST, userLogoutUsingPOST, userUpdateUsingPOST} from "@/services/rico/userController";
+import {userLogoutUsingPOST, userUpdateUsingPOST} from "@/services/rico/userController";
 import {KeyOutlined, PhoneOutlined, UserOutlined} from "@ant-design/icons";
 import {history} from "@@/core/history";
 import {stringify} from "querystring";
+import {useModel} from "@@/exports";
 
 const Center: React.FC = () => {
   const [currentUser, setcurrentUser] = useState<API.User>();
+  const {initialState} = useModel('@@initialState');
   const [open, setOpen] = useState(false);
   const onfinish = async (values: any) => {
     console.log(values);
@@ -37,17 +39,11 @@ const Center: React.FC = () => {
   const onClose = () => {
     setOpen(false);
   };
-  const Current = async () => {
-    const res = await getCurrentUserUsingPOST();
-    if (res.data) {
-      setcurrentUser(res.data);
-    } else {
-      message.error("用户未登录");
-    }
-  };
 
   useEffect(() => {
-    Current();
+    if(initialState?.currentUser){
+      setcurrentUser(initialState.currentUser);
+    }
   }, [])
 
   return (

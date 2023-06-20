@@ -1,5 +1,5 @@
 import {Button, Card, DatePicker, Descriptions, List, message, Modal} from 'antd';
-import {history} from 'umi';
+import {history} from '@@/core/history';
 // import Search from 'antd/es/input/Search';
 import {getCurrentCarSpaceUsingPOST, listCarSpacesUsingPOST,} from '@/services/rico/carSpaceController';
 import {PayCircleOutlined, PhoneOutlined, PushpinOutlined, UserOutlined} from '@ant-design/icons';
@@ -8,14 +8,13 @@ import React, {useEffect, useState} from 'react';
 import {sleep} from "@antfu/utils";
 
 /**
- * 添加图表页面
+ * 车位大厅
  * @constructor
  */
 const CarpSpaceRoomPage: React.FC = () => {
-
   const [carSpaceList, setCarSpaceList] = useState<API.ComplCarspace[]>();
   const [currentCarSpace, setCurrentCarSpace] = useState<API.ComplCarspace>();
-  // const [total, setTotal] = useState<number>(0);
+
   const [loading, setLoading] = useState<boolean>();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -149,7 +148,7 @@ const CarpSpaceRoomPage: React.FC = () => {
                     showMessage(item.carspace?.carId ?? 0);
                   }}
                 >
-                  {'详情'}
+                  详情
                 </Button>
               }
             >
