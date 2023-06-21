@@ -20,7 +20,13 @@ const CarpSpaceRoomPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOk = (value: any) => {
-    history.push('/carSpace/Reserve', {carId: value});
+    console.log(initialState?.currentUser?.userId,currentCarSpace?.carspace?.ownerId);
+    if(initialState?.currentUser?.userId===currentCarSpace?.carspace?.ownerId){
+      message.error("不可以预约自己的车位!");
+    }
+    else{
+      history.push('/carSpace/Reserve', {carId: value});
+    }
   };
 
   const handleCancel = () => {
@@ -59,6 +65,10 @@ const CarpSpaceRoomPage: React.FC = () => {
 
   return (
     <div className="room">
+      <Button type="ghost" disabled style={{fontSize:"40px"}}>
+        车位大厅
+      </Button>
+      <div style={{marginBottom:24}} />
       <Modal
         open={isModalOpen}
         onOk={() => handleOk(currentCarSpace?.carspace?.carId)}
