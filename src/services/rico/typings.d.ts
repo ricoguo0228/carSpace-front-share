@@ -182,6 +182,7 @@ declare namespace API {
 
   type Reservation = {
     carId?: number;
+    carPass?: string;
     insertTime?: string;
     reserveEndTime?: string;
     reserveId?: number;
@@ -193,6 +194,7 @@ declare namespace API {
 
   type ReservationAddRequest = {
     carId?: number;
+    carPass?: string;
     timeSlots?: timeNameLocalDateTime[];
   };
 

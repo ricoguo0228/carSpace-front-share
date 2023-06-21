@@ -1,9 +1,23 @@
 import {history, useLocation} from 'umi';
 import React, {useEffect, useState} from 'react';
-import {Button, Card, Col, DatePicker, Descriptions, Drawer, Form, Input, List, message, Modal, Row, Space} from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  DatePicker,
+  Descriptions,
+  Drawer,
+  Form,
+  Input,
+  List,
+  message,
+  Modal,
+  Popconfirm,
+  Row,
+  Space
+} from "antd";
 import {DeleteOutlined, EditOutlined, PayCircleOutlined, UserOutlined} from "@ant-design/icons";
 import dayjs from "dayjs";
-import {currentReservationsUsingPOST,} from "@/services/rico/reservationController";
 import {
   carSpaceDeleteUsingPOST,
   carSpaceUpdateUsingPOST,
@@ -11,6 +25,7 @@ import {
 } from "@/services/rico/carSpaceController";
 import {sleep} from "@antfu/utils";
 import {timeSlotsDeleteUsingPOST, timeSlotsIncreaseUsingPOST} from "@/services/rico/ireserveController";
+import {currentReservationsInCreateUsingPOST} from "@/services/rico/reservationController";
 
 const CarSpaceMyCreateInfo: React.FC = () => {
   const state: any = useLocation().state;
@@ -18,12 +33,15 @@ const CarSpaceMyCreateInfo: React.FC = () => {
   const [currentCarSpace, setCurrentCarSpace] = useState<API.ComplCarspace>();
   const [currentIreserve, setCurrentIreserve] = useState<API.Ireserve>();
   const [Reservations, setReservations] = useState<API.Reservation[]>();
+  const [timeSLots, setTimeSLots] = useState<[]>();
   const [loading, setLoading] = useState<boolean>();
   const [showMessage, setShowMessage] = useState<boolean>(false);
-  const [showDelete, setShowDelete] = useState<boolean>(false);
+  const [showCarSpaceDelete, setShowCarSpaceDelete] = useState<boolean>(false);
   const [showTimeSlotDelete, setShowTimeSlotDelete] = useState<boolean>(false);
-  const [timeSLots, setTimeSLots] = useState<[]>();
+  const [reservedUser, setReservedUser] = useState<API.ComplCarspace>();
   const [edit, setEdit] = useState<boolean>(false);
+
+
   const loadData = async () => {
     setLoading(true);
     await sleep(500);
@@ -33,7 +51,7 @@ const CarSpaceMyCreateInfo: React.FC = () => {
     } else {
       message.error("获取车位信息失败");
     }
-    const Reservetions = await currentReservationsUsingPOST({id: carId});
+    const Reservetions = await currentReservationsInCreateUsingPOST({id: carId});
     if (Reservetions.data) {
       setReservations(Reservetions.data);
     } else {
@@ -41,6 +59,7 @@ const CarSpaceMyCreateInfo: React.FC = () => {
     }
     setLoading(false);
   }
+
   useEffect(() => {
       loadData();
     }, []
@@ -60,6 +79,7 @@ const CarSpaceMyCreateInfo: React.FC = () => {
       carId: carId,
       timeSlots: timeSLots
     })
+    console.log(res);
     if (res.code === 0) {
       message.success("添加成功");
       setShowMessage(false);
@@ -68,48 +88,44 @@ const CarSpaceMyCreateInfo: React.FC = () => {
       message.error('添加失败，' + res.description);
     }
   }
-  const handleCancel = () => {
-    setShowMessage(false);
-    setShowTimeSlotDelete(false);
-    setShowDelete(false);
-  }
-  const showAddMessage = () => {
-    setShowMessage(true);
-  }
-  const showDeleteMessage = () => {
-    setShowDelete(true);
-  }
-  const showDeleteTimeSlot = (value:any)=>{
-    setCurrentIreserve(value);
-    setShowTimeSlotDelete(true);
-  }
+
   const onSelect = (value: any) => {
     setTimeSLots(value);
   }
+
   const deleteCarSpace = async () => {
     const res = await carSpaceDeleteUsingPOST({id: currentCarSpace?.carspace?.carId})
     if (res.data) {
       message.success("删除成功" + res.description);
       await sleep(200);
       history.push('/carSpace/myCreate');
-      setShowDelete(false);
+      setShowCarSpaceDelete(false);
     } else {
       message.error("删除失败，" + res.description);
     }
   }
+
   const deleteTimeSlot = async () => {
-    const res = await timeSlotsDeleteUsingPOST({id:currentIreserve?.iid});
-    if(res.code === 0){
+    const res = await timeSlotsDeleteUsingPOST({id: currentIreserve?.iid});
+    if (res.code === 0) {
       message.success("删除成功");
       setShowTimeSlotDelete(false);
       await loadData();
-    }else{
+    } else {
       message.error("删除失败," + res.description);
     }
   }
-  const onClose = () => {
-    setEdit(false);
-  };
+
+  const currentReservedUser = async (value:any) => {
+    const res = await getCurrentCarSpaceUsingPOST({id: value.carId});
+    if(res.code === 0) {
+      setReservedUser(res.data);
+    }else{
+      message.error("获取用户信息失败"+res.description);
+    }
+  }
+
+
   return (
     <div className="reserve-car-space">
       <Button size="large" type="link" onClick={() => {
@@ -121,7 +137,7 @@ const CarSpaceMyCreateInfo: React.FC = () => {
       <Drawer
         title="修改车位信息"
         placement="left"
-        onClose={onClose} open={edit}
+        onClose={() => setEdit(false)} open={edit}
       >
         <Form onFinish={(values: API.CarSpaceUpdateRequest) => {
           values.carId = currentCarSpace?.carspace?.carId;
@@ -149,7 +165,11 @@ const CarSpaceMyCreateInfo: React.FC = () => {
       <Modal
         title={'删除确认'}
         open={showTimeSlotDelete}
-        onCancel={handleCancel}
+        onCancel={() => {
+          setShowMessage(false);
+          setShowTimeSlotDelete(false);
+          setShowCarSpaceDelete(false);
+        }}
         onOk={deleteTimeSlot}
         okText={'确定'}
         cancelText={'取消'}
@@ -157,8 +177,12 @@ const CarSpaceMyCreateInfo: React.FC = () => {
       </Modal>
       <Modal
         title={'删除确认'}
-        open={showDelete}
-        onCancel={handleCancel}
+        open={showCarSpaceDelete}
+        onCancel={() => {
+          setShowMessage(false);
+          setShowTimeSlotDelete(false);
+          setShowCarSpaceDelete(false);
+        }}
         onOk={deleteCarSpace}
         okText={'确定'}
         cancelText={'取消'}
@@ -169,7 +193,11 @@ const CarSpaceMyCreateInfo: React.FC = () => {
         title={'预约时间'}
         open={showMessage}
         onOk={handleOk}
-        onCancel={handleCancel}
+        onCancel={() => {
+          setShowMessage(false);
+          setShowTimeSlotDelete(false);
+          setShowCarSpaceDelete(false);
+        }}
         cancelText={'取消'}
         okText={'确定'}
       >
@@ -181,26 +209,31 @@ const CarSpaceMyCreateInfo: React.FC = () => {
       </Modal>
       <Row gutter={24}>
         <Col push={6} span={12}>
-          <Card title={'车位详情'}
-                extra={
-                  <>
-                    <Space>
-                      <Button type="dashed"
-                              onClick={
-                                () => {
-                                  setEdit(true);
-                                }}>
-                        <EditOutlined />
-                      </Button>
-                      <Button danger ghost onClick={showDeleteMessage}>
-                        <DeleteOutlined />
-                      </Button>
-                      <Button onClick={showAddMessage}>
-                        添加可预约时间
-                      </Button>
-                    </Space>
-                  </>
-                }>
+          <Card
+            title={'车位详情'}
+            extra={
+              <>
+                <Space>
+                  <Button type="dashed"
+                          onClick={
+                            () => {
+                              setEdit(true);
+                            }}>
+                    <EditOutlined/>
+                  </Button>
+                  <Button danger ghost onClick={() => {
+                    setShowCarSpaceDelete(true)
+                  }}>
+                    <DeleteOutlined/>
+                  </Button>
+                  <Button onClick={() => {
+                    setShowMessage(true)
+                  }}>
+                    添加可预约时间
+                  </Button>
+                </Space>
+              </>
+            }>
             <Descriptions title={currentCarSpace?.carspace?.location} column={1}>
               <Descriptions.Item
                 label={
@@ -226,7 +259,10 @@ const CarSpaceMyCreateInfo: React.FC = () => {
                           disabled
                           defaultValue={[dayjs(item.startTime), dayjs(item.endTime)]}
                         />
-                        <Button size="small" onClick={()=>showDeleteTimeSlot(item)}>
+                        <Button size="small" onClick={() => {
+                          setCurrentIreserve(item);
+                          setShowTimeSlotDelete(true);
+                        }}>
                           删除
                         </Button>
                       </Space>
@@ -242,19 +278,31 @@ const CarSpaceMyCreateInfo: React.FC = () => {
                   dataSource={Reservations}
                   renderItem={(item) => (
                     <List.Item>
-                      <DatePicker.RangePicker
-                        size={'small'}
-                        showTime
-                        disabled
-                        defaultValue={[dayjs(item.reserveStartTime), dayjs(item.reserveEndTime)]}
-                      />
+                      <Space>
+                        <DatePicker.RangePicker
+                          size={'small'}
+                          showTime
+                          disabled
+                          defaultValue={[dayjs(item.reserveStartTime), dayjs(item.reserveEndTime)]}
+                        />
+                        <Popconfirm
+                          title="预约人员信息"
+                          description={reservedUser?.ownerName+':'+reservedUser?.phoneNumber+'-'+item.carPass}
+                          showCancel={false}
+                        >
+                          <Button size="small" onClick={() => {
+                            currentReservedUser(item);
+                          }}>
+                            <UserOutlined/>
+                          </Button>
+                        </Popconfirm>
+                      </Space>
                       <br/>
                     </List.Item>
                   )}
                 />
               </Descriptions.Item>
             </Descriptions>
-
           </Card>
         </Col>
       </Row>

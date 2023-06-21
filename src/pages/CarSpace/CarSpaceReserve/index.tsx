@@ -1,16 +1,15 @@
-import {useLocation} from 'umi';
+import {history, useLocation} from 'umi';
 import React, {useEffect, useState} from 'react';
-import {Button, Card, Col, DatePicker, Descriptions, List, message, Modal, notification, Row, Space} from "antd";
-import {PayCircleOutlined, PhoneOutlined, UserOutlined} from "@ant-design/icons";
+import {Button, Card, Col, DatePicker, Descriptions, Input, List, message, Modal, notification, Row, Space} from "antd";
+import {CarOutlined, PayCircleOutlined, PhoneOutlined, UserOutlined} from "@ant-design/icons";
 import dayjs from "dayjs";
 import {
   addReservationUsingPOST,
-  currentReservationsUsingPOST,
+  currentReservationsInReserveUsingPOST,
   deleteReservationUsingPOST
 } from "@/services/rico/reservationController";
 import {getCurrentCarSpaceUsingPOST} from "@/services/rico/carSpaceController";
 import Context from '@ant-design/icons/lib/components/Context';
-import { history } from 'umi';
 import {sleep} from "@antfu/utils";
 
 const CarSpaceReserve: React.FC = () => {
@@ -44,7 +43,7 @@ const CarSpaceReserve: React.FC = () => {
     else{
       message.error("获取车位信息失败");
     }
-    const Reservetions = await currentReservationsUsingPOST({id: carId});
+    const Reservetions = await currentReservationsInReserveUsingPOST({id: carId});
     if(Reservetions.data){
       setReservations(Reservetions.data);
     }
@@ -115,6 +114,8 @@ const CarSpaceReserve: React.FC = () => {
             onSelect(value);
           }}
           name="timeSlots" showTime/>
+        <div style={{marginBottom:12}} />
+        <Input placeholder="输入您的车牌号" prefix={<CarOutlined /> } allowClear />
       </Modal>
       <Row gutter={24}>
         <Col span={12}>

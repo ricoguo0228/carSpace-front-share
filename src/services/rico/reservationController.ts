@@ -17,12 +17,27 @@ export async function addReservationUsingPOST(
   });
 }
 
-/** currentReservations POST /api/reserve/current */
-export async function currentReservationsUsingPOST(
+/** currentReservationsInCreate POST /api/reserve/currentCreate */
+export async function currentReservationsInCreateUsingPOST(
   body: API.IdRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseListReservation>('/api/reserve/current', {
+  return request<API.BaseResponseListReservation>('/api/reserve/currentCreate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** currentReservationsInReserve POST /api/reserve/currentReserve */
+export async function currentReservationsInReserveUsingPOST(
+  body: API.IdRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseListReservation>('/api/reserve/currentReserve', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
