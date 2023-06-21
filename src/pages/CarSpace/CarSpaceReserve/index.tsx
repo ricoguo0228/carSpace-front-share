@@ -66,11 +66,11 @@ const CarSpaceReserve: React.FC = () => {
         btn,
         placement:"topRight"
       });
+      setshowMessage(false);
       await loadData();
     } else {
       message.error('预约失败，'+res.description);
     }
-    setshowMessage(false);
   }
   const showAddMessage = () => {
     setshowMessage(true);
@@ -98,12 +98,10 @@ const CarSpaceReserve: React.FC = () => {
   return (
     <div className="reserve-car-space">
       {contextHolder}
-      <Button size="large" type="link"  onClick={() => {
-        history.push('/carSpace/myReserve')
-      }}>
-        返回我的预约
+      <Button type="ghost" disabled style={{fontSize:"40px"}}>
+        预约
       </Button>
-      <div style={{marginBottom:16}} />
+      <div style={{marginBottom:24}} />
       <Modal
         title={'预约时间'}
         open={showMessage}

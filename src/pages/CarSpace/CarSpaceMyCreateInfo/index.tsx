@@ -58,11 +58,11 @@ const CarSpaceMyCreateInfo: React.FC = () => {
     })
     if (res.code === 0) {
       message.success("添加成功");
+      setShowMessage(false);
       await loadData();
     } else {
       message.error('添加失败，' + res.description);
     }
-    setShowMessage(false);
   }
 
   const showAddMessage = () => {
@@ -99,6 +99,10 @@ const CarSpaceMyCreateInfo: React.FC = () => {
   )
   return (
     <div className="reserve-car-space">
+      <Button type="ghost" disabled style={{fontSize:"40px"}}>
+        车位信息
+      </Button>
+      <div style={{marginBottom:24}} />
       <Drawer
         title="修改车位信息"
         placement="left"

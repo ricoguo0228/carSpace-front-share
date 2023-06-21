@@ -25,6 +25,10 @@ const CarSpaceCreate: React.FC = () => {
   };
   return (
     <div className="create-car-space">
+      <Button type="ghost" disabled style={{fontSize:"40px"}}>
+        创建车位
+      </Button>
+      <div style={{marginBottom:24}} />
       <Row gutter={24}>
         <Col span={16}>
           <Card></Card>
