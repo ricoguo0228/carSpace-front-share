@@ -4,7 +4,11 @@ import {PayCircleOutlined, PushpinOutlined} from "@ant-design/icons";
 import dayjs from "dayjs";
 import {history} from "@@/core/history";
 import {sleep} from "@antfu/utils";
-import {listUserSpacesUsingPOST} from "@/services/rico/carSpaceController";
+import {
+  carSpaceInvokeUsingPOST,
+  carSpacePublishUsingPOST,
+  listUserSpacesUsingPOST
+} from "@/services/rico/carSpaceController";
 import {useModel} from "@@/exports";
 
 const CarSpaceCreate: React.FC = () => {
@@ -19,22 +23,42 @@ const CarSpaceCreate: React.FC = () => {
       if (res.data) {
         setCarSpaceList(res.data ?? []);
       } else {
-        message.error('大厅加载失败，' + res.description);
+        message.error('我的车位加载失败，' + res.description);
       }
     } catch (e: any) {
-      message.error('大厅加载失败，'+e.message);
+      message.error('我的车位加载失败，' + e.message);
     }
     setLoading(false);
   };
   useEffect(() => {
     loadData();
   }, []);
+  const publishOrInvoke = async (item: API.ComplCarspace) => {
+    if (item.carspace?.carStatus === 0) {
+      const res = await carSpacePublishUsingPOST({id: item.carspace.carId});
+      if (res.code === 0) {
+        message.success('发布成功');
+        await loadData();
+      } else {
+        message.error('发布失败，' + res.description);
+      }
+    }
+    if (item.carspace?.carStatus === 1) {
+      const res = await carSpaceInvokeUsingPOST({id: item.carspace.carId});
+      if (res.code === 0) {
+        message.success('回收成功');
+        await loadData();
+      } else {
+        message.error('回收失败，' + res.description);
+      }
+    }
+  }
   return (
     <div className="my-reserve">
-      <Button type="ghost" disabled style={{fontSize:"40px"}}>
+      <Button type="ghost" disabled style={{fontSize: "40px"}}>
         我的车位
       </Button>
-      <div style={{marginBottom:24}} />
+      <div style={{marginBottom: 24}}/>
       <List
         split={false}
         grid={{
@@ -62,15 +86,23 @@ const CarSpaceCreate: React.FC = () => {
                 </div>
               }
               extra={
-                <Button
-                  size={'small'}
-                  type="link"
-                  onClick={() => {
-                    history.push('/carSpace/myCreateInfo', {carId: item.carspace?.carId});
-                  }}
-                >
-                  详情
-                </Button>
+                <>
+                  <Button
+                    size={'small'}
+                    onClick={() => publishOrInvoke(item)}
+                  >
+                    {item.carspace?.carStatus===0 ? '发布':'回收'}
+                  </Button>
+                  <Button
+                    size={'small'}
+                    type="link"
+                    onClick={() => {
+                      history.push('/carSpace/myCreateInfo', {carId: item.carspace?.carId});
+                    }}
+                  >
+                    详情
+                  </Button>
+                </>
               }
             >
               <List.Item.Meta

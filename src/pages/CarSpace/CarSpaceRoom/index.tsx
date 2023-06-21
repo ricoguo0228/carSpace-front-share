@@ -75,8 +75,6 @@ const CarpSpaceRoomPage: React.FC = () => {
         onCancel={handleCancel}
         cancelText={'关闭'}
         okText={'前往预约'}
-        //todo:加一个不是自己的车位不允许预约
-        //currentCarSpace?.carspace?.ownerId === initialState?.currentUser?.userId ? null :
       >
         <Descriptions title={currentCarSpace?.carspace?.location} column={1}>
           <Descriptions.Item
