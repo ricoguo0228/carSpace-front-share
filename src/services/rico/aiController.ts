@@ -7,7 +7,7 @@ export async function AiCreateCarSpaceUsingPOST(
   body: API.AiRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponsestring>('/api/Ai/CarSpaceCreate', {
+  return request<API.BaseResponseAiResponse>('/api/Ai/CarSpaceCreate', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

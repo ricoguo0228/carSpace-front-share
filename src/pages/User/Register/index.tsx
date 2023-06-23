@@ -1,19 +1,24 @@
 import Footer from '@/components/Footer';
 
-import { getCurrentUserUsingPOST, userRegisterUsingPOST } from '@/services/rico/userController';
-import { Link } from '@@/exports';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { LoginForm, ProFormText } from '@ant-design/pro-components';
-import { useEmotionCss } from '@ant-design/use-emotion-css';
-import { Helmet, history, useModel } from '@umijs/max';
-import { message, Tabs } from 'antd';
-import React, { useState } from 'react';
-import { flushSync } from 'react-dom';
+import {
+  getCurrentUserUsingPOST,
+  userLoginUsingPOST,
+  userRegisterUsingPOST
+} from '@/services/rico/userController';
+import {Link} from '@@/exports';
+import {LockOutlined, UserOutlined} from '@ant-design/icons';
+import {LoginForm, ProFormText} from '@ant-design/pro-components';
+import {useEmotionCss} from '@ant-design/use-emotion-css';
+import {Helmet, history, useModel} from '@umijs/max';
+import {message, Tabs} from 'antd';
+import React, {useState} from 'react';
+import {flushSync} from 'react-dom';
 import Settings from '../../../../config/defaultSettings';
+import {sleep} from "@antfu/utils";
 
 const Login: React.FC = () => {
   const [type, setType] = useState<string>('account');
-  const { setInitialState } = useModel('@@initialState');
+  const {setInitialState} = useModel('@@initialState');
   const containerClassName = useEmotionCss(() => {
     return {
       display: 'flex',
@@ -37,23 +42,27 @@ const Login: React.FC = () => {
     }
   };
   const handleSubmit = async (values: API.UserRegisterRequest) => {
-    try {
-      // 登录
-      const res = await userRegisterUsingPOST(values);
-      if (res.code === 0) {
-        const defaultLoginSuccessMessage = '注册成功！';
-        message.success(defaultLoginSuccessMessage);
+    // 注册
+    const RegisterRes = await userRegisterUsingPOST(values);
+    if (RegisterRes.code === 0) {
+      message.success('注册成功！即将为您自动登录');
+      const LoginRes = await userLoginUsingPOST(
+        {
+          userAccount:values.userAccount,
+          userPassword:values.userPassword
+        }
+      );
+      if(LoginRes.code === 0){
         await fetchUserInfo();
-        const urlParams = new URL(window.location.href).searchParams;
-        history.push(urlParams.get('redirect') || '/');
-        return;
-      } else {
-        message.error(res.message);
+        await sleep(1000);
+        history.push('/');
+      } else{
+        message.error('自动登录失败，请重新手动登录');
+        await sleep(1000);
+        history.push('/user/login');
       }
-    } catch (error) {
-      const defaultLoginFailureMessage = '注册失败，请重试！';
-      console.log(error);
-      message.error(defaultLoginFailureMessage);
+    } else {
+      message.error(RegisterRes.description);
     }
   };
   return (
@@ -74,7 +83,7 @@ const Login: React.FC = () => {
             minWidth: 280,
             maxWidth: '75vw',
           }}
-          logo={<img alt="logo" src="/logo.svg" />}
+          logo={<img alt="logo" src="/logo.svg"/>}
           title="车享"
           subTitle={'车享 开启您的新生活'}
           initialValues={{
@@ -101,7 +110,7 @@ const Login: React.FC = () => {
                 name="userAccount"
                 fieldProps={{
                   size: 'large',
-                  prefix: <UserOutlined />,
+                  prefix: <UserOutlined/>,
                 }}
                 placeholder={'请输入用户名'}
                 rules={[
@@ -115,7 +124,7 @@ const Login: React.FC = () => {
                 name="userPhone"
                 fieldProps={{
                   size: 'large',
-                  prefix: <UserOutlined />,
+                  prefix: <UserOutlined/>,
                 }}
                 placeholder={'请输入手机号'}
                 rules={[
@@ -133,7 +142,7 @@ const Login: React.FC = () => {
                 name="userPassword"
                 fieldProps={{
                   size: 'large',
-                  prefix: <LockOutlined />,
+                  prefix: <LockOutlined/>,
                 }}
                 placeholder={'请输入密码'}
                 rules={[
@@ -151,7 +160,7 @@ const Login: React.FC = () => {
                 name="userCheckPassword"
                 fieldProps={{
                   size: 'large',
-                  prefix: <LockOutlined />,
+                  prefix: <LockOutlined/>,
                 }}
                 placeholder={'请再次输入密码'}
                 rules={[
@@ -183,7 +192,7 @@ const Login: React.FC = () => {
           </div>
         </LoginForm>
       </div>
-      <Footer />
+      <Footer/>
     </div>
   );
 };

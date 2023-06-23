@@ -28,7 +28,6 @@ export default [
     icon: 'HomeOutlined',
     component: './Admin/CarSpace'
   },
-  {path: '/ai',name:'AI功能',icon:'ConsoleSqlOutlined', component: './AI'},
   {path: '/user/center', component: './User/Center'},
   {path: '/', redirect: '/carSpace/room'},
   {path: '*', name: '404', layout: false, component: './404'},
