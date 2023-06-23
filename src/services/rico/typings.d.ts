@@ -1,4 +1,13 @@
 declare namespace API {
+  type AiRequest = {
+    aiStr?: string;
+  };
+
+  type AiSureCreateCarSpaceRequest = {
+    location?: string;
+    price?: number;
+  };
+
   type BaseResponseboolean = {
     code?: number;
     data?: boolean;
@@ -37,6 +46,13 @@ declare namespace API {
   type BaseResponselong = {
     code?: number;
     data?: number;
+    description?: string;
+    message?: string;
+  };
+
+  type BaseResponsestring = {
+    code?: number;
+    data?: string;
     description?: string;
     message?: string;
   };

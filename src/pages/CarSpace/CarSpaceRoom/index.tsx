@@ -1,4 +1,4 @@
-import {Button, Card, DatePicker, Descriptions, List, message, Modal} from 'antd';
+import {Button, Card, DatePicker, Descriptions, FloatButton, List, message, Modal} from 'antd';
 import {history} from '@@/core/history';
 // import Search from 'antd/es/input/Search';
 import {getCurrentCarSpaceUsingPOST, listCarSpacesUsingPOST,} from '@/services/rico/carSpaceController';
@@ -65,6 +65,7 @@ const CarpSpaceRoomPage: React.FC = () => {
 
   return (
     <div className="room">
+      <FloatButton onClick={() => console.log('click')} />
       <Button type="ghost" disabled style={{fontSize:"40px"}}>
         车位大厅
       </Button>
