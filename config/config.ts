@@ -130,7 +130,7 @@ export default defineConfig({
     {
       requestLibPath: "import { request } from '@umijs/max'",
       // 或者使用在线的版本
-      schemaPath: "http://localhost:8080/api/v3/api-docs",
+      schemaPath: "http://0000.0000.0000.0000:0000/api/v3/api-docs",
       // schemaPath: join(__dirname, 'oneapi.json'),
       mock: false,
       projectName: 'rico',
