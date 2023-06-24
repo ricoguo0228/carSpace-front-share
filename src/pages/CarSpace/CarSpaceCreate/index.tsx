@@ -54,7 +54,7 @@ const CarSpaceCreate: React.FC = () => {
                 <RangePicker showTime showNow/>
               </Form.Item>
               <Form.Item label="车位图片" valuePropName="fileList" name="file">
-                <Upload listType="picture-card">
+                <Upload listType="picture-card"> disabled={true}
                   <div>
                     <PlusOutlined/>
                     <div style={{marginTop: 8}}>上传</div>
