@@ -63,6 +63,13 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponsePageComplCarspace = {
+    code?: number;
+    data?: PageComplCarspace;
+    description?: string;
+    message?: string;
+  };
+
   type BaseResponsestring = {
     code?: number;
     data?: string;
@@ -128,6 +135,18 @@ declare namespace API {
 
   type IreserveIncreaseRequest = {
     carId?: number;
+    timeSlots?: timeNameLocalDateTime[];
+  };
+
+  type ListCarSpaceRequest = {
+    current?: number;
+    endPrice?: number;
+    id?: number;
+    name?: string;
+    pageSize?: number;
+    sortField?: string;
+    sortOrder?: string;
+    startPrice?: number;
     timeSlots?: timeNameLocalDateTime[];
   };
 
@@ -207,6 +226,24 @@ declare namespace API {
       | 'VARIANT_ALSO_NEGOTIATES';
     view?: View;
     viewName?: string;
+  };
+
+  type OrderItem = {
+    asc?: boolean;
+    column?: string;
+  };
+
+  type PageComplCarspace = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: ComplCarspace[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
   };
 
   type Reservation = {

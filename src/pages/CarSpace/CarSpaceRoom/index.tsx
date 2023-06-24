@@ -5,7 +5,6 @@ import {getCurrentCarSpaceUsingPOST, listCarSpacesUsingPOST,} from '@/services/r
 import {PayCircleOutlined, PhoneOutlined, PushpinOutlined, UserOutlined} from '@ant-design/icons';
 import dayjs from 'dayjs';
 import React, {useEffect, useState} from 'react';
-import {sleep} from "@antfu/utils";
 import {useModel} from "@@/exports";
 
 /**
@@ -13,11 +12,18 @@ import {useModel} from "@@/exports";
  * @constructor
  */
 const CarpSpaceRoomPage: React.FC = () => {
-  const [carSpaceList, setCarSpaceList] = useState<API.ComplCarspace[]>();
+  const initSearchParams = {
+    current: 1,
+    pageSize: 4,
+  };
+
+  const [carSpaceList, setCarSpaceList] = useState<API.ComplCarspace[]>([]);
   const [currentCarSpace, setCurrentCarSpace] = useState<API.ComplCarspace>();
   const {initialState} = useModel('@@initialState');
   const [loading, setLoading] = useState<boolean>();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [searchParams, setSearchParams] = useState<API.ListCarSpaceRequest>({ ...initSearchParams });
 
   const handleOk = (value: any) => {
     console.log(initialState?.currentUser?.userId,currentCarSpace?.carspace?.ownerId);
@@ -35,11 +41,11 @@ const CarpSpaceRoomPage: React.FC = () => {
 
   const loadData = async () => {
     setLoading(true);
-    await sleep(500);
     try {
-      const res = await listCarSpacesUsingPOST();
+      const res = await listCarSpacesUsingPOST(searchParams);
+      console.log(res);
       if (res.data) {
-        setCarSpaceList(res.data ?? []);
+        setCarSpaceList(res.data.records ?? []);
       } else {
         message.error('大厅加载失败');
       }
@@ -61,7 +67,7 @@ const CarpSpaceRoomPage: React.FC = () => {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [searchParams]);
 
   return (
     <div className="room">

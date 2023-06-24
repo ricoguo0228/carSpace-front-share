@@ -63,9 +63,16 @@ export async function carSpaceInvokeUsingPOST(
 }
 
 /** listCarSpaces POST /api/carSpaces/listCarSpaces */
-export async function listCarSpacesUsingPOST(options?: { [key: string]: any }) {
-  return request<API.BaseResponseListComplCarspace>('/api/carSpaces/listCarSpaces', {
+export async function listCarSpacesUsingPOST(
+  body: API.ListCarSpaceRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponsePageComplCarspace>('/api/carSpaces/listCarSpaces', {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }
@@ -87,10 +94,10 @@ export async function listReservedSpacesUsingPOST(
 
 /** listUserSpaces POST /api/carSpaces/listUserCarSpaces */
 export async function listUserSpacesUsingPOST(
-  body: API.IdRequest,
+  body: API.ListCarSpaceRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseListComplCarspace>('/api/carSpaces/listUserCarSpaces', {
+  return request<API.BaseResponsePageComplCarspace>('/api/carSpaces/listUserCarSpaces', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

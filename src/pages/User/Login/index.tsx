@@ -10,6 +10,7 @@ import {message, Tabs} from 'antd';
 import React, {useState} from 'react';
 import {flushSync} from 'react-dom';
 import Settings from '../../../../config/defaultSettings';
+import {sleep} from "@antfu/utils";
 
 const Login: React.FC = () => {
   const [type, setType] = useState<string>('account');
@@ -27,6 +28,7 @@ const Login: React.FC = () => {
   });
   const fetchUserInfo = async () => {
     const userInfo = await getCurrentUserUsingPOST();
+
     if (userInfo) {
       flushSync(() => {
         setInitialState((s) => ({
@@ -40,13 +42,12 @@ const Login: React.FC = () => {
     try {
       // 登录
       const res = await userLoginUsingPOST(values);
+
       if (res.code === 0) {
-        const defaultLoginSuccessMessage = '登录成功！';
-        message.success(defaultLoginSuccessMessage);
+        message.success('登录成功！');
+        await sleep(1000);
         await fetchUserInfo();
-        const urlParams = new URL(window.location.href).searchParams;
-        history.push(urlParams.get('redirect') || '/');
-        return;
+        history.push('/carSpace/admin');
       } else {
         message.error(res.message);
       }

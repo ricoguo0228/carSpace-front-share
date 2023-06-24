@@ -3,17 +3,15 @@ import {Button, Card, DatePicker, List, message} from "antd";
 import {PayCircleOutlined, PushpinOutlined} from "@ant-design/icons";
 import dayjs from "dayjs";
 import {history} from "@@/core/history";
-import {sleep} from "@antfu/utils";
 import {listReservedSpacesUsingPOST} from "@/services/rico/carSpaceController";
 import {useModel} from "@@/exports";
 
 const CarSpaceCreate: React.FC = () => {
-  const [carSpaceList, setCarSpaceList] = useState<API.ComplCarspace[]>();
+  const [carSpaceList, setCarSpaceList] = useState<API.ComplCarspace[]>([]);
   const [loading, setLoading] = useState<boolean>();
   const {initialState} = useModel('@@initialState');
   const loadData = async () => {
     setLoading(true);
-    await sleep(500);
     try {
       const res = await listReservedSpacesUsingPOST({id: initialState?.currentUser?.userId});
       if (res.data) {

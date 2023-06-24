@@ -12,7 +12,7 @@ import {
 import {useModel} from "@@/exports";
 
 const CarSpaceCreate: React.FC = () => {
-  const [carSpaceList, setCarSpaceList] = useState<API.ComplCarspace[]>();
+  const [carSpaceList, setCarSpaceList] = useState<API.ComplCarspace[]>([]);
   const [loading, setLoading] = useState<boolean>();
   const {initialState} = useModel('@@initialState');
   const loadData = async () => {
@@ -21,7 +21,7 @@ const CarSpaceCreate: React.FC = () => {
     try {
       const res = await listUserSpacesUsingPOST({id: initialState?.currentUser?.userId});
       if (res.data) {
-        setCarSpaceList(res.data ?? []);
+        setCarSpaceList(res.data.records ?? []);
       } else {
         message.error('我的车位加载失败，' + res.description);
       }
