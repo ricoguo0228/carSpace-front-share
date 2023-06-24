@@ -134,6 +134,7 @@ declare namespace API {
   type ListCarSpaceRequest = {
     current?: number;
     endPrice?: number;
+    endTime?: string;
     location?: string;
     ownerId?: number;
     pageSize?: number;
@@ -141,7 +142,7 @@ declare namespace API {
     sortField?: string;
     sortOrder?: string;
     startPrice?: number;
-    timeSlots?: timeNameLocalDateTime[];
+    startTime?: string;
   };
 
   type ModelAndView = {

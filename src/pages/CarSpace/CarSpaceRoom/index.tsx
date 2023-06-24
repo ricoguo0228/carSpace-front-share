@@ -180,8 +180,24 @@ const CarpSpaceRoomPage: React.FC = () => {
               }}/>
             </Space>
             <Space>
-              <DatePicker showTime allowClear placeholder="限制开始时间"/>
-              <DatePicker showTime allowClear placeholder="限制结束时间"/>
+              <DatePicker showTime allowClear
+                          placeholder="限制开始时间"
+                          onChange={(value:any) => {
+                            setSearchParams({
+                              ...initSearchParams,
+                              startTime: value,
+                            })
+                          }}
+              />
+              <DatePicker showTime allowClear
+                          placeholder="限制结束时间"
+                          onChange={(value:any) => {
+                            setSearchParams({
+                              ...initSearchParams,
+                              endTime: value,
+                            })
+                          }}
+              />
             </Space>
           </Space>
         </Col>
