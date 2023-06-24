@@ -35,13 +35,6 @@ declare namespace API {
     message?: string;
   };
 
-  type BaseResponseListComplCarspace = {
-    code?: number;
-    data?: ComplCarspace[];
-    description?: string;
-    message?: string;
-  };
-
   type BaseResponseListIreserve = {
     code?: number;
     data?: Ireserve[];
@@ -141,9 +134,10 @@ declare namespace API {
   type ListCarSpaceRequest = {
     current?: number;
     endPrice?: number;
-    id?: number;
-    name?: string;
+    location?: string;
+    ownerId?: number;
     pageSize?: number;
+    reserverId?: number;
     sortField?: string;
     sortOrder?: string;
     startPrice?: number;

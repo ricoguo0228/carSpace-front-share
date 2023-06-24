@@ -79,10 +79,10 @@ export async function listCarSpacesUsingPOST(
 
 /** listReservedSpaces POST /api/carSpaces/listReservedCarSpaces */
 export async function listReservedSpacesUsingPOST(
-  body: API.IdRequest,
+  body: API.ListCarSpaceRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseListComplCarspace>('/api/carSpaces/listReservedCarSpaces', {
+  return request<API.BaseResponsePageComplCarspace>('/api/carSpaces/listReservedCarSpaces', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -13,7 +13,7 @@ const CarSpaceCreate: React.FC = () => {
   const {initialState} = useModel('@@initialState');
   const loadData = async () => {
     setLoading(true);
-    await sleep(500);
+    await sleep(200);
     try {
       const res = await listUserSpacesUsingPOST({id: initialState?.currentUser?.userId});
       if (res.data) {

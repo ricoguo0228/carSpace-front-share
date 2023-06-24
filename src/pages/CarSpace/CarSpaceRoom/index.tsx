@@ -6,6 +6,7 @@ import {PayCircleOutlined, PhoneOutlined, PushpinOutlined, UserOutlined} from '@
 import dayjs from 'dayjs';
 import React, {useEffect, useState} from 'react';
 import {useModel} from "@@/exports";
+import {sleep} from "@antfu/utils";
 
 /**
  * 车位大厅
@@ -23,14 +24,13 @@ const CarpSpaceRoomPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [searchParams, setSearchParams] = useState<API.ListCarSpaceRequest>({ ...initSearchParams });
+  const [searchParams, setSearchParams] = useState<API.ListCarSpaceRequest>({...initSearchParams});
 
   const handleOk = (value: any) => {
-    console.log(initialState?.currentUser?.userId,currentCarSpace?.carspace?.ownerId);
-    if(initialState?.currentUser?.userId===currentCarSpace?.carspace?.ownerId){
+    console.log(initialState?.currentUser?.userId, currentCarSpace?.carspace?.ownerId);
+    if (initialState?.currentUser?.userId === currentCarSpace?.carspace?.ownerId) {
       message.error("不可以预约自己的车位!");
-    }
-    else{
+    } else {
       history.push('/carSpace/Reserve', {carId: value});
     }
   };
@@ -41,6 +41,7 @@ const CarpSpaceRoomPage: React.FC = () => {
 
   const loadData = async () => {
     setLoading(true);
+    await sleep(200);
     try {
       const res = await listCarSpacesUsingPOST(searchParams);
       console.log(res);
@@ -71,11 +72,11 @@ const CarpSpaceRoomPage: React.FC = () => {
 
   return (
     <div className="room">
-      <FloatButton onClick={() => console.log('click')} />
-      <Button type="ghost" disabled style={{fontSize:"40px"}}>
+      <FloatButton onClick={() => console.log('click')}/>
+      <Button type="ghost" disabled style={{fontSize: "40px"}}>
         车位大厅
       </Button>
-      <div style={{marginBottom:24}} />
+      <div style={{marginBottom: 24}}/>
       <Modal
         open={isModalOpen}
         onOk={() => handleOk(currentCarSpace?.carspace?.carId)}

@@ -35,7 +35,7 @@ const CarSpaceReserve: React.FC = () => {
   );
   const loadData = async () => {
     setLoading(true);
-    await sleep(500);
+    await sleep(200);
     const ComplCarSpaceResponse = await getCurrentCarSpaceUsingPOST({id: carId});
     if(ComplCarSpaceResponse.data){
       setCurrentCarSpace(ComplCarSpaceResponse.data);

@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import {history} from "@@/core/history";
 import {listReservedSpacesUsingPOST} from "@/services/rico/carSpaceController";
 import {useModel} from "@@/exports";
+import {sleep} from "@antfu/utils";
 
 const CarSpaceCreate: React.FC = () => {
   const [carSpaceList, setCarSpaceList] = useState<API.ComplCarspace[]>([]);
@@ -12,10 +13,11 @@ const CarSpaceCreate: React.FC = () => {
   const {initialState} = useModel('@@initialState');
   const loadData = async () => {
     setLoading(true);
+    await sleep(200);
     try {
-      const res = await listReservedSpacesUsingPOST({id: initialState?.currentUser?.userId});
+      const res = await listReservedSpacesUsingPOST({reserverId: initialState?.currentUser?.userId});
       if (res.data) {
-        setCarSpaceList(res.data ?? []);
+        setCarSpaceList(res.data.records ?? []);
       } else {
         message.error('大厅加载失败');
       }
