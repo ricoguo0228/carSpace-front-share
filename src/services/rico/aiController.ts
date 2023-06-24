@@ -22,7 +22,7 @@ export async function AiCreateCarSpaceSureUsingPOST(
   body: API.AiSureCreateCarSpaceRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponselong>('/api/Ai/CarSpaceCreateSure', {
+  return request<API.BaseResponsestring>('/api/Ai/CarSpaceCreateSure', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

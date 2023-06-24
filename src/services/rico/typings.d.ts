@@ -63,6 +63,13 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponsestring = {
+    code?: number;
+    data?: string;
+    description?: string;
+    message?: string;
+  };
+
   type BaseResponseUser = {
     code?: number;
     data?: User;
