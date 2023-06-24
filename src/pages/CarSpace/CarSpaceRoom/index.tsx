@@ -1,4 +1,17 @@
-import {Button, Card, DatePicker, Descriptions, FloatButton, List, message, Modal} from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  DatePicker,
+  Descriptions,
+  FloatButton,
+  InputNumber,
+  List,
+  message,
+  Modal,
+  Row,
+  Space
+} from 'antd';
 import {history} from '@@/core/history';
 // import Search from 'antd/es/input/Search';
 import {getCurrentCarSpaceUsingPOST, listCarSpacesUsingPOST,} from '@/services/rico/carSpaceController';
@@ -7,6 +20,7 @@ import dayjs from 'dayjs';
 import React, {useEffect, useState} from 'react';
 import {useModel} from "@@/exports";
 import {sleep} from "@antfu/utils";
+import Search from "antd/es/input/Search";
 
 /**
  * 车位大厅
@@ -15,7 +29,7 @@ import {sleep} from "@antfu/utils";
 const CarpSpaceRoomPage: React.FC = () => {
   const initSearchParams = {
     current: 1,
-    pageSize: 4,
+    pageSize: 8,
   };
 
   const [carSpaceList, setCarSpaceList] = useState<API.ComplCarspace[]>([]);
@@ -72,11 +86,6 @@ const CarpSpaceRoomPage: React.FC = () => {
 
   return (
     <div className="room">
-      <FloatButton onClick={() => console.log('click')}/>
-      <Button type="ghost" disabled style={{fontSize: "40px"}}>
-        车位大厅
-      </Button>
-      <div style={{marginBottom: 24}}/>
       <Modal
         open={isModalOpen}
         onOk={() => handleOk(currentCarSpace?.carspace?.carId)}
@@ -135,77 +144,123 @@ const CarpSpaceRoomPage: React.FC = () => {
           </Descriptions.Item>
         </Descriptions>
       </Modal>
-      <List
-        split={false}
-        grid={{
-          gutter: 16,
-          xs: 1,
-          sm: 1,
-          md: 2,
-          lg: 2,
-          xl: 2,
-          xxl: 4,
-        }}
-        loading={loading}
-        dataSource={carSpaceList}
-        renderItem={(item) => (
-          <List.Item>
-            <Card
-              title={
-                <div>
-                  {item.carspace
-                    ? item.carspace.location
-                      ? item.carspace.location + '  '
-                      : '位置未知'
-                    : '位置未知'}
-                  <PushpinOutlined/>
-                </div>
-              }
-              extra={
-                <Button
-                  size={'small'}
-                  type="link"
-                  onClick={() => {
-                    showMessage(item.carspace?.carId ?? 0);
-                  }}
-                >
-                  详情
-                </Button>
-              }
-            >
-              <List.Item.Meta
-                description={
-                  <div>
-                    <PayCircleOutlined/>
-                    {item.carspace
-                      ? item.carspace.price
-                        ? '  ' + item.carspace.price + '元/时'
-                        : '价格未知'
-                      : '价格未知'}
-                  </div>
-                }
-              />
-              <div style={{marginBottom: 8}}/>
-              {'可预约时间段：'}
-              <List
-                split={false}
+      <Row gutter={24}>
+        <Col span={8}>
+          <FloatButton onClick={() => console.log('click')}/>
+          <Button type="ghost" disabled style={{fontSize: "40px"}}>
+            车位大厅
+          </Button>
+          <div style={{marginBottom: 30}}/>
+        </Col>
+        <Col span={8} push={8}>
+          <Space direction="vertical">
+            <Space>
+              <Search
+                placeholder="位置搜索"
+                enterButton
                 loading={loading}
-                dataSource={item.ireseres}
-                renderItem={(item) => (
-                  <List.Item>
-                    <DatePicker.RangePicker
-                      showTime
-                      disabled
-                      defaultValue={[dayjs(item.startTime), dayjs(item.endTime)]}
-                    />
-                    <br/>
-                  </List.Item>
-                )}
+                onSearch={(value) => {
+                  setSearchParams({
+                    ...initSearchParams,
+                    location: value,
+                  });
+                }}
               />
-            </Card>
-          </List.Item>
-        )}
-      />
+              <InputNumber addonBefore="最小价格" min={0} defaultValue={0} onChange={(value) => {
+                setSearchParams({
+                  ...initSearchParams,
+                  startPrice: value ?? -1,
+                })
+              }}/>
+              <InputNumber addonBefore="最大价格" min={0} defaultValue={0} onChange={(value) => {
+                setSearchParams({
+                  ...initSearchParams,
+                  endPrice: value ?? -1,
+                })
+              }}/>
+            </Space>
+            <Space>
+              <DatePicker showTime allowClear placeholder="限制开始时间"/>
+              <DatePicker showTime allowClear placeholder="限制结束时间"/>
+            </Space>
+          </Space>
+        </Col>
+      </Row>
+      <Row gutter={24}>
+        <Col span={24}>
+          <List
+            split={false}
+            grid={{
+              gutter: 16,
+              xs: 1,
+              sm: 1,
+              md: 2,
+              lg: 2,
+              xl: 2,
+              xxl: 4,
+            }}
+            loading={loading}
+            dataSource={carSpaceList}
+            renderItem={(item) => (
+              <List.Item>
+                <Card
+                  title={
+                    <div>
+                      {item.carspace
+                        ? item.carspace.location
+                          ? item.carspace.location + '  '
+                          : '位置未知'
+                        : '位置未知'}
+                      <PushpinOutlined/>
+                    </div>
+                  }
+                  extra={
+                    <Button
+                      size={'small'}
+                      type="link"
+                      onClick={() => {
+                        showMessage(item.carspace?.carId ?? 0);
+                      }}
+                    >
+                      详情
+                    </Button>
+                  }
+                >
+                  <List.Item.Meta
+                    description={
+                      <div>
+                        <PayCircleOutlined/>
+                        {item.carspace
+                          ? item.carspace.price
+                            ? '  ' + item.carspace.price + '元/时'
+                            : '价格未知'
+                          : '价格未知'}
+                      </div>
+                    }
+                  />
+                  <div style={{marginBottom: 8}}/>
+                  {'可预约时间段：'}
+                  <List
+                    split={false}
+                    loading={loading}
+                    dataSource={item.ireseres}
+                    renderItem={(item) => (
+                      <List.Item>
+                        <DatePicker.RangePicker
+                          showTime
+                          disabled
+                          defaultValue={[dayjs(item.startTime), dayjs(item.endTime)]}
+                        />
+                        <br/>
+                      </List.Item>
+                    )}
+                  />
+                </Card>
+              </List.Item>
+            )}
+          />
+        </Col>
+      </Row>
     </div>
   );
 };
