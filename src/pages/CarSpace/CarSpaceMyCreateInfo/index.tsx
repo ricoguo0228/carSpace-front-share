@@ -26,6 +26,7 @@ import {
 import {sleep} from "@antfu/utils";
 import {timeSlotsDeleteUsingPOST, timeSlotsIncreaseUsingPOST} from "@/services/rico/ireserveController";
 import {currentReservationsInCreateUsingPOST} from "@/services/rico/reservationController";
+import {getCurrentUserUsingPOST} from "@/services/rico/userController";
 
 const CarSpaceMyCreateInfo: React.FC = () => {
   const state: any = useLocation().state;
@@ -38,7 +39,7 @@ const CarSpaceMyCreateInfo: React.FC = () => {
   const [showMessage, setShowMessage] = useState<boolean>(false);
   const [showCarSpaceDelete, setShowCarSpaceDelete] = useState<boolean>(false);
   const [showTimeSlotDelete, setShowTimeSlotDelete] = useState<boolean>(false);
-  const [reservedUser, setReservedUser] = useState<API.ComplCarspace>();
+  const [reservedUser, setReservedUser] = useState<API.User>();
   const [edit, setEdit] = useState<boolean>(false);
 
 
@@ -117,7 +118,7 @@ const CarSpaceMyCreateInfo: React.FC = () => {
   }
 
   const currentReservedUser = async (value:any) => {
-    const res = await getCurrentCarSpaceUsingPOST({id: value.carId});
+    const res = await getCurrentUserUsingPOST({id: value.reserverId});
     if(res.code === 0) {
       setReservedUser(res.data);
     }else{
@@ -287,7 +288,7 @@ const CarSpaceMyCreateInfo: React.FC = () => {
                         />
                         <Popconfirm
                           title="预约人员信息"
-                          description={reservedUser?.ownerName+':'+reservedUser?.phoneNumber+'-'+item.carPass}
+                          description={reservedUser?.nickName+':'+reservedUser?.userPhone+'-'+item.carPass}
                           showCancel={false}
                         >
                           <Button size="small" onClick={() => {
